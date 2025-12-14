@@ -6,7 +6,7 @@
 #    By: babe <habe@student.42tokyo.jp>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/08 17:22:20 by babe              #+#    #+#              #
-#    Updated: 2025/11/08 21:24:06 by babe             ###   ########.fr        #
+#    Updated: 2025/12/13 15:58:18 by babe             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,8 +16,11 @@ CFLAGS = -Wall -Wextra -Werror
 
 SRCS = src/main.c \
 		src/ft_atoi.c \
-		src/utils.c \
-		src/param_init.c
+		src/error.c \
+		src/init.c\
+		src/thread_create.c\
+		src/param_check.c\
+		src/cleanup.c
 		
 OBJS = $(SRCS:.c=.o)
 
@@ -27,10 +30,13 @@ $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
 	
 clean:
-	rm -f $(OBJS)
+	@echo "\033[33m[Clean]\033[0m Remove object files..."
+	@rm -f $(OBJS)
 
-fclean: clean
-	rm -f $(NAME)
+fclean:
+	@echo "\033[31m[Fclean]\033[0m Remove all build artifacts..."
+	@rm -f $(OBJS)
+	@rm -f $(NAME)
 
 re: fclean all
 

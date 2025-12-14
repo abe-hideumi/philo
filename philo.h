@@ -6,7 +6,7 @@
 /*   By: babe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 17:22:22 by babe              #+#    #+#             */
-/*   Updated: 2025/11/08 21:24:22 by babe             ###   ########.fr       */
+/*   Updated: 2025/12/14 16:53:07 by babe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,8 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-
-typedef struct s_fork
-{
-	int				id;
-	int				is_taken;
-}	t_fork;
-
-typedef struct s_philo
-{
-	int				id;
-	t_fork			*left_fork;
-	t_fork			*right_fork;
-}	t_philo;
-
-typedef struct s_table
-{
-	int				num_philos;
-	t_philo			*philos;
-	t_fork			*forks;
-}	t_table;
+# include <pthread.h>
+# include <sys/time.h>
 
 typedef struct s_params
 {
@@ -46,8 +28,43 @@ typedef struct s_params
 	int				count_must_eat;
 }	t_params;
 
+typedef struct s_fork
+{
+	pthread_mutex_t	mutex;
+}	t_fork;
+
+typedef struct s_philo	t_philo;
+typedef struct s_data	t_data;
+
+struct s_data
+{
+	long long		start_time;
+	int				someone_died;
+	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	death_mutex;
+	t_params		params;
+	t_fork			*forks;
+	t_philo			*philos;
+};
+
+struct s_philo
+{
+	int				id;
+	pthread_t		thread;
+	int				eat_count;
+	long long		last_eat_time;
+	pthread_mutex_t	eat_mutex;
+	t_fork			*left_fork;
+	t_fork			*right_fork;
+	t_data			*data;
+};
+
 void	error_exit(int code);
-void	param_init(t_params *params, int argc, char **argv);
 int		ft_atoi(const char *str);
+void	param_check(int argc, char **argv);
+void	all_init(t_params *params, t_data *data, int argc, char **argv);
+void	thread_create(t_data *data);
+void	*philo_routine(void *arg);
+void	cleanup(t_data *data);
 
 #endif
