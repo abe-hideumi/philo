@@ -6,7 +6,7 @@
 /*   By: babe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 17:05:00 by babe              #+#    #+#             */
-/*   Updated: 2025/12/14 17:05:00 by babe             ###   ########.fr       */
+/*   Updated: 2025/12/27 12:44:41 by babe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	cleanup(t_data *data)
 		i++;
 	}
 	pthread_mutex_destroy(&data->print_mutex);
-	pthread_mutex_destroy(&data->death_mutex);
+	pthread_mutex_destroy(&data->died_mutex);
 	free(data->forks);
 	free(data->philos);
 }

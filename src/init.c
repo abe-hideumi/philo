@@ -6,7 +6,7 @@
 /*   By: babe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 14:31:45 by babe              #+#    #+#             */
-/*   Updated: 2025/12/13 15:24:12 by babe             ###   ########.fr       */
+/*   Updated: 2025/12/27 12:44:48 by babe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	data_init( t_params *params, t_data *data)
 	data->start_time = 0;
 	data->someone_died = 0;
 	pthread_mutex_init(&data->print_mutex, NULL);
-	pthread_mutex_init(&data->death_mutex, NULL);
+	pthread_mutex_init(&data->died_mutex, NULL);
 	data->params = *params;
 	data->forks = malloc(sizeof(t_fork) * params->num_philos);
 	data->philos = malloc(sizeof(t_philo) * params->num_philos);

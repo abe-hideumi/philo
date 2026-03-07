@@ -6,7 +6,7 @@
 /*   By: babe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 17:22:22 by babe              #+#    #+#             */
-/*   Updated: 2025/12/14 16:53:07 by babe             ###   ########.fr       */
+/*   Updated: 2025/12/27 12:44:12 by babe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ struct s_data
 	long long		start_time;
 	int				someone_died;
 	pthread_mutex_t	print_mutex;
-	pthread_mutex_t	death_mutex;
+	pthread_mutex_t	died_mutex;
 	t_params		params;
 	t_fork			*forks;
 	t_philo			*philos;
@@ -59,12 +59,13 @@ struct s_philo
 	t_data			*data;
 };
 
-void	error_exit(int code);
-int		ft_atoi(const char *str);
-void	param_check(int argc, char **argv);
-void	all_init(t_params *params, t_data *data, int argc, char **argv);
-void	thread_create(t_data *data);
-void	*philo_routine(void *arg);
-void	cleanup(t_data *data);
+void		error_exit(int code);
+int			ft_atoi(const char *str);
+void		param_check(int argc, char **argv);
+void		all_init(t_params *params, t_data *data, int argc, char **argv);
+void		thread_create(t_data *data);
+void		*philo_routine(void *arg);
+void		cleanup(t_data *data);
+long long	time_in_ms(void);
 
 #endif
