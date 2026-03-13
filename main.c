@@ -6,11 +6,11 @@
 /*   By: babe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 17:31:21 by babe              #+#    #+#             */
-/*   Updated: 2025/12/14 17:20:32 by babe             ###   ########.fr       */
+/*   Updated: 2026/03/13 12:33:56 by babe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../philo.h"
+#include "./philo.h"
 
 int	main(int argc, char **argv)
 {
