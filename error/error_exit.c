@@ -1,22 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   error_exit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: babe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/08 17:54:46 by babe              #+#    #+#             */
-/*   Updated: 2025/12/14 17:33:14 by babe             ###   ########.fr       */
+/*   Created: 2026/03/17 11:41:24 by habe              #+#    #+#             */
+/*   Updated: 2026/03/17 11:41:41 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void	error_exit(int code)
+void	error_exit(int code, void (*func)(void))
 {
-	if (code == -1)
-	{
-		write(2, "Error: Invalid argument\n", 24);
-	}
+	if (func != NULL)
+		func();
 	exit(code);
 }
