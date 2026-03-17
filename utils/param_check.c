@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   param_check.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: babe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 15:24:14 by babe              #+#    #+#             */
-/*   Updated: 2025/12/13 15:32:22 by babe             ###   ########.fr       */
+/*   Updated: 2026/03/17 12:05:37 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void	param_length(char *str)
 		i++;
 	}
 	if (len > 10)
-		error_exit(-1);
+		error_exit(EXIT_FAILURE, argument_error);
 }
 
 void	param_check(int argc, char **argv)
@@ -39,17 +39,17 @@ void	param_check(int argc, char **argv)
 	while (i < argc)
 	{
 		j = 0;
-		if (argv[i][0] == '\0')
-			error_exit(-1);
-		if (argv[i][0] == '+')
+		if (argv[i][0] == '\0' || argv[i][0] == '-')
+			error_exit(EXIT_FAILURE, argument_error);
+		if (argv[i][0] == '+' && argv[i][1] == '\0')
+			error_exit(EXIT_FAILURE, argument_error);
+		else if (argv[i][0] == '+')
 			j++;
-		if (argv[i][0] == '-')
-			error_exit(-1);
 		param_length(argv[i]);
 		while (argv[i][j] != '\0')
 		{
 			if (argv[i][j] < '0' || argv[i][j] > '9')
-				error_exit(-1);
+				error_exit(EXIT_FAILURE, argument_error);
 			j++;
 		}
 		i++;

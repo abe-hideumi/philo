@@ -1,32 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/08 17:43:14 by babe              #+#    #+#             */
-/*   Updated: 2026/03/17 12:02:16 by habe             ###   ########.fr       */
+/*   Created: 2026/03/17 11:35:31 by habe              #+#    #+#             */
+/*   Updated: 2026/03/17 11:35:52 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-int	ft_atoi(const char *str)
+size_t	ft_strlen(const char *s)
 {
-	long long	result;
-	int			i;
+	size_t	len;
 
-	result = 0;
-	i = 0;
-	if (str[i] == '+')
-		i++;
-	while (str[i] >= '0' && str[i] <= '9')
-	{
-		result = result * 10 + (str[i] - '0');
-		if (result > 2147483647)
-			error_exit(EXIT_FAILURE, argument_error);
-		i++;
-	}
-	return ((int)result);
+	if (s == NULL)
+		return (0);
+	len = 0;
+	while (s[len] != '\0')
+		len++;
+	return (len);
 }
