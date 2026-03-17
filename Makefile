@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: babe <habe@student.42tokyo.jp>             +#+  +:+       +#+         #
+#    By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/08 17:22:20 by babe              #+#    #+#              #
-#    Updated: 2026/03/13 12:25:47 by babe             ###   ########.fr        #
+#    Updated: 2026/03/17 11:42:40 by habe             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,14 +15,16 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
 SRCS = main.c \
+		error/error_exit.c \
+		error/error_msg.c \
 		routine/philos_routine.c\
 		routine/times.c
+		thread/thread_create.c\
+		thread/init.c\
+		thread/cleanup.c\
 		utils/ft_atoi.c \
-		utils/error.c \
-		utils/thread_create.c\
 		utils/param_check.c\
-		utils/cleanup.c\
-		utils/init.c\
+		utils/ft_strlen.c\
 
 OBJS = $(SRCS:.c=.o)
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: babe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 17:22:22 by babe              #+#    #+#             */
-/*   Updated: 2025/12/27 12:44:12 by babe             ###   ########.fr       */
+/*   Updated: 2026/03/17 11:46:10 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,25 @@ struct s_philo
 	t_data			*data;
 };
 
-void		error_exit(int code);
-int			ft_atoi(const char *str);
-void		param_check(int argc, char **argv);
+// error functions
+void		error_exit(int code, void (*func)(void));
+void		thread_error(void);
+void		argument_error(void);
+void		malloc_error(void);
+void		mutex_error(void);
+
+// routine functions
+long long	time_in_ms(void);
+void		*philo_routine(void *arg);
+
+// thread functions
 void		all_init(t_params *params, t_data *data, int argc, char **argv);
 void		thread_create(t_data *data);
-void		*philo_routine(void *arg);
 void		cleanup(t_data *data);
-long long	time_in_ms(void);
+
+// utils functions
+size_t		ft_strlen(const char *s);
+int			ft_atoi(const char *str);
+void		param_check(int argc, char **argv);
 
 #endif
