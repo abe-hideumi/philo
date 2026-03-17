@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: babe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 14:31:45 by babe              #+#    #+#             */
-/*   Updated: 2025/12/27 12:44:48 by babe             ###   ########.fr       */
+/*   Updated: 2026/03/17 11:47:40 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,29 @@ static void	param_init(t_params *params, int argc, char **argv)
 		params->count_must_eat = -1;
 	if (params->num_philos <= 0 || params->time_to_die <= 0
 		|| params->time_to_eat <= 0 || params->time_to_sleep <= 0)
-		error_exit(-1);
+		error_exit(EXIT_FAILURE, argument_error);
 	if (argc == 6 && params->count_must_eat <= 0)
-		error_exit(-1);
+		error_exit(EXIT_FAILURE, argument_error);
 }
 
-static void	data_init( t_params *params, t_data *data)
+static void	data_init(t_params *params, t_data *data)
 {
 	data->start_time = 0;
 	data->someone_died = 0;
-	pthread_mutex_init(&data->print_mutex, NULL);
-	pthread_mutex_init(&data->died_mutex, NULL);
+	if (pthread_mutex_init(&data->print_mutex, NULL))
+		error_exit(EXIT_FAILURE, mutex_error);
+	if (pthread_mutex_init(&data->died_mutex, NULL))
+		error_exit(EXIT_FAILURE, mutex_error);
 	data->params = *params;
 	data->forks = malloc(sizeof(t_fork) * params->num_philos);
+	if (data->forks == NULL)
+		error_exit(EXIT_FAILURE, malloc_error);
 	data->philos = malloc(sizeof(t_philo) * params->num_philos);
-	if (data->forks == NULL || data->philos == NULL)
-		error_exit(-1);
+	if (data->philos == NULL)
+	{
+		free(data->forks);
+		error_exit(EXIT_FAILURE, malloc_error);
+	}
 }
 
 static void	mutex_init(t_params *params, t_data *data)
@@ -50,14 +57,16 @@ static void	mutex_init(t_params *params, t_data *data)
 	i = 0;
 	while (i < params->num_philos)
 	{
-		pthread_mutex_init(&data->forks[i].mutex, NULL);
+		if (pthread_mutex_init(&data->forks[i].mutex, NULL))
+			error_exit(EXIT_FAILURE, mutex_error);
 		data->philos[i].id = i + 1;
 		data->philos[i].data = data;
 		data->philos[i].left_fork = &data->forks[i];
 		data->philos[i].right_fork = &data->forks[(i + 1) % params->num_philos];
 		data->philos[i].eat_count = 0;
 		data->philos[i].last_eat_time = 0;
-		pthread_mutex_init(&data->philos[i].eat_mutex, NULL);
+		if (pthread_mutex_init(&data->philos[i].eat_mutex, NULL))
+			error_exit(EXIT_FAILURE, mutex_error);
 		i++;
 	}
 }
