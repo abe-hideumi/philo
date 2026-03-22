@@ -6,18 +6,21 @@
 /*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 17:22:22 by babe              #+#    #+#             */
-/*   Updated: 2026/03/17 11:46:10 by habe             ###   ########.fr       */
+/*   Updated: 2026/03/19 12:35:00 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
+# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <pthread.h>
 # include <sys/time.h>
+
+# define NO_EXIT -1
 
 typedef struct s_params
 {
@@ -72,8 +75,11 @@ void		*philo_routine(void *arg);
 
 // thread functions
 void		all_init(t_params *params, t_data *data, int argc, char **argv);
-void		thread_create(t_data *data);
+void		thread_create_join(t_data *data);
+void		free_data(t_data *data);
+void		cleanup_data(t_data *data);
 void		cleanup(t_data *data);
+void		cleanup_partial(t_data *data, int must);
 
 // utils functions
 size_t		ft_strlen(const char *s);

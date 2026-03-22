@@ -6,15 +6,16 @@
 /*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 11:41:24 by habe              #+#    #+#             */
-/*   Updated: 2026/03/17 11:41:41 by habe             ###   ########.fr       */
+/*   Updated: 2026/03/21 20:54:29 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void	error_exit(int code, void (*func)(void))
+void	error_exit(int status, void (*func)(void))
 {
 	if (func != NULL)
 		func();
-	exit(code);
+	if (status != NO_EXIT)
+		exit(status);
 }

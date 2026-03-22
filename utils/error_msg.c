@@ -6,7 +6,7 @@
 /*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 17:54:46 by babe              #+#    #+#             */
-/*   Updated: 2026/03/17 11:46:35 by habe             ###   ########.fr       */
+/*   Updated: 2026/03/17 12:35:38 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,32 @@
 
 void	argument_error(void)
 {
-	char	*message;
+	char	*msg;
 
-	message = "Error: Invalid argument\n";
-	write(2, message, ft_strlen(message));
+	msg = "Error: Invalid argument\n";
+	write(2, msg, ft_strlen(msg));
 }
 
 void	thread_error(void)
 {
-	char	*message;
+	char	*msg;
 
-	message = "Error: Thread creation failed\n";
-	write(2, message, ft_strlen(message));
+	msg = "Error: Thread creation failed\n";
+	write(2, msg, ft_strlen(msg));
 }
 
 void	malloc_error(void)
 {
-	char	*message;
+	char	*msg;
 
-	message = "Error: Memory allocation failed\n";
-	write(2, message, ft_strlen(message));
+	msg = "Error: Memory allocation failed\n";
+	write(2, msg, ft_strlen(msg));
 }
 
 void	mutex_error(void)
 {
-	char	*message;
+	char	*msg;
 
-	message = "Error: Mutex initialization failed\n";
-	write(2, message, ft_strlen(message));
+	msg = "Error: Mutex initialization failed\n";
+	write(2, msg, ft_strlen(msg));
 }

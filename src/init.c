@@ -6,7 +6,7 @@
 /*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 14:31:45 by babe              #+#    #+#             */
-/*   Updated: 2026/03/17 11:47:40 by habe             ###   ########.fr       */
+/*   Updated: 2026/03/22 13:12:47 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,28 @@ static void	data_init(t_params *params, t_data *data)
 {
 	data->start_time = 0;
 	data->someone_died = 0;
+	data->forks = NULL;
+	data->philos = NULL;
 	if (pthread_mutex_init(&data->print_mutex, NULL))
 		error_exit(EXIT_FAILURE, mutex_error);
 	if (pthread_mutex_init(&data->died_mutex, NULL))
+	{
+		pthread_mutex_destroy(&data->print_mutex);
 		error_exit(EXIT_FAILURE, mutex_error);
+	}
 	data->params = *params;
 	data->forks = malloc(sizeof(t_fork) * params->num_philos);
 	if (data->forks == NULL)
+	{
+		pthread_mutex_destroy(&data->print_mutex);
+		pthread_mutex_destroy(&data->died_mutex);
 		error_exit(EXIT_FAILURE, malloc_error);
+	}
 	data->philos = malloc(sizeof(t_philo) * params->num_philos);
 	if (data->philos == NULL)
 	{
+		pthread_mutex_destroy(&data->print_mutex);
+		pthread_mutex_destroy(&data->died_mutex);
 		free(data->forks);
 		error_exit(EXIT_FAILURE, malloc_error);
 	}
@@ -58,7 +69,10 @@ static void	mutex_init(t_params *params, t_data *data)
 	while (i < params->num_philos)
 	{
 		if (pthread_mutex_init(&data->forks[i].mutex, NULL))
+		{
+			cleanup_partial(data, i);
 			error_exit(EXIT_FAILURE, mutex_error);
+		}
 		data->philos[i].id = i + 1;
 		data->philos[i].data = data;
 		data->philos[i].left_fork = &data->forks[i];
@@ -66,7 +80,11 @@ static void	mutex_init(t_params *params, t_data *data)
 		data->philos[i].eat_count = 0;
 		data->philos[i].last_eat_time = 0;
 		if (pthread_mutex_init(&data->philos[i].eat_mutex, NULL))
+		{
+			pthread_mutex_destroy(&data->forks[i].mutex);
+			cleanup_partial(data, i);
 			error_exit(EXIT_FAILURE, mutex_error);
+		}
 		i++;
 	}
 }
