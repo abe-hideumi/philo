@@ -6,7 +6,7 @@
 /*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 19:37:30 by babe              #+#    #+#             */
-/*   Updated: 2026/03/22 13:09:57 by habe             ###   ########.fr       */
+/*   Updated: 2026/03/24 16:12:11 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	thread_create(t_data *data)
 	{
 		data->philos[count].last_eat_time = data->start_time;
 		if (pthread_create(&data->philos[count].thread, NULL,
-			philo_routine, &data->philos[count]) != 0)
+				philo_routine, &data->philos[count]) != 0)
 		{
 			free_data(data);
 			error_exit(EXIT_FAILURE, thread_error);
@@ -32,17 +32,17 @@ static void	thread_create(t_data *data)
 
 static void	thread_join(t_data *data)
 {
-	int	i;
+	int	count;
 
-	i = 0;
-	while (i < data->params.num_philos)
+	count = 0;
+	while (count < data->params.num_philos)
 	{
-		if (pthread_join(data->philos[i].thread, NULL) != 0)
+		if (pthread_join(data->philos[count].thread, NULL) != 0)
 		{
 			free_data(data);
 			error_exit(EXIT_FAILURE, thread_error);
 		}
-		i++;
+		count++;
 	}
 }
 

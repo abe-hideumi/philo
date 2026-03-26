@@ -6,7 +6,7 @@
 /*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 17:22:22 by babe              #+#    #+#             */
-/*   Updated: 2026/03/19 12:35:00 by habe             ###   ########.fr       */
+/*   Updated: 2026/03/24 16:59:05 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,12 @@ typedef struct s_data	t_data;
 struct s_data
 {
 	long long		start_time;
-	int				someone_died;
+	bool			someone_died;
 	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	died_mutex;
 	t_params		params;
 	t_fork			*forks;
+
 	t_philo			*philos;
 };
 

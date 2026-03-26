@@ -30,12 +30,29 @@ static void	param_init(t_params *params, int argc, char **argv)
 		error_exit(EXIT_FAILURE, argument_error);
 }
 
+static void	alloc_data(t_params *params, t_data *data)
+{
+	data->forks = malloc(sizeof(t_fork) * params->num_philos);
+	if (data->forks == NULL)
+	{
+		cleanup_data(data);
+		error_exit(EXIT_FAILURE, malloc_error);
+	}
+	data->philos = malloc(sizeof(t_philo) * params->num_philos);
+	if (data->philos == NULL)
+	{
+		cleanup_data(data);
+		error_exit(EXIT_FAILURE, malloc_error);
+	}
+}
+
 static void	data_init(t_params *params, t_data *data)
 {
 	data->start_time = 0;
 	data->someone_died = 0;
 	data->forks = NULL;
 	data->philos = NULL;
+	data->params = *params;
 	if (pthread_mutex_init(&data->print_mutex, NULL))
 		error_exit(EXIT_FAILURE, mutex_error);
 	if (pthread_mutex_init(&data->died_mutex, NULL))
@@ -43,21 +60,23 @@ static void	data_init(t_params *params, t_data *data)
 		pthread_mutex_destroy(&data->print_mutex);
 		error_exit(EXIT_FAILURE, mutex_error);
 	}
-	data->params = *params;
-	data->forks = malloc(sizeof(t_fork) * params->num_philos);
-	if (data->forks == NULL)
+	alloc_data(params, data);
+}
+
+static void	philo_init(t_params *params, t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < params->num_philos)
 	{
-		pthread_mutex_destroy(&data->print_mutex);
-		pthread_mutex_destroy(&data->died_mutex);
-		error_exit(EXIT_FAILURE, malloc_error);
-	}
-	data->philos = malloc(sizeof(t_philo) * params->num_philos);
-	if (data->philos == NULL)
-	{
-		pthread_mutex_destroy(&data->print_mutex);
-		pthread_mutex_destroy(&data->died_mutex);
-		free(data->forks);
-		error_exit(EXIT_FAILURE, malloc_error);
+		data->philos[i].id = i + 1;
+		data->philos[i].data = data;
+		data->philos[i].left_fork = &data->forks[i];
+		data->philos[i].right_fork = &data->forks[(i + 1) % params->num_philos];
+		data->philos[i].eat_count = 0;
+		data->philos[i].last_eat_time = 0;
+		i++;
 	}
 }
 
@@ -73,12 +92,6 @@ static void	mutex_init(t_params *params, t_data *data)
 			cleanup_partial(data, i);
 			error_exit(EXIT_FAILURE, mutex_error);
 		}
-		data->philos[i].id = i + 1;
-		data->philos[i].data = data;
-		data->philos[i].left_fork = &data->forks[i];
-		data->philos[i].right_fork = &data->forks[(i + 1) % params->num_philos];
-		data->philos[i].eat_count = 0;
-		data->philos[i].last_eat_time = 0;
 		if (pthread_mutex_init(&data->philos[i].eat_mutex, NULL))
 		{
 			pthread_mutex_destroy(&data->forks[i].mutex);
@@ -93,5 +106,6 @@ void	all_init(t_params *params, t_data *data, int argc, char **argv)
 {
 	param_init(params, argc, argv);
 	data_init(params, data);
+	philo_init(params, data);
 	mutex_init(params, data);
 }
