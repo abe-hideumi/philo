@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   times.c                                            :+:      :+:    :+:   */
+/*   error_exit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: babe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/14 17:32:45 by babe              #+#    #+#             */
-/*   Updated: 2025/12/14 17:45:26 by babe             ###   ########.fr       */
+/*   Created: 2026/03/17 11:41:24 by habe              #+#    #+#             */
+/*   Updated: 2026/03/21 20:54:29 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-long long	time_in_ms(void)
+void	error_exit(int status, void (*func)(void))
 {
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+	if (func != NULL)
+		func();
+	if (status != NO_EXIT)
+		exit(status);
 }

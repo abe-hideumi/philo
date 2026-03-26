@@ -1,32 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philos_routine.c                                   :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: babe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/14 17:30:29 by babe              #+#    #+#             */
-/*   Updated: 2025/12/27 12:48:32 by babe             ###   ########.fr       */
+/*   Created: 2026/03/17 11:35:31 by habe              #+#    #+#             */
+/*   Updated: 2026/03/17 11:35:52 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-static int	is_died(t_data *data)
+size_t	ft_strlen(const char *s)
 {
-	int result;
+	size_t	len;
 
-	pthread_mutex_lock(&data->died_mutex);
-	
-}
-
-void	*philo_routine(void *arg)
-{
-	t_philo		*philo;
-
-	philo = (t_philo *)arg;
-	if (philo->id % 2 == 0)
-		usleep(100);
-	while (philo->data)
-	return (NULL);
+	if (s == NULL)
+		return (0);
+	len = 0;
+	while (s[len] != '\0')
+		len++;
+	return (len);
 }

@@ -1,22 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   times.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: babe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/08 17:54:46 by babe              #+#    #+#             */
-/*   Updated: 2025/12/14 17:33:14 by babe             ###   ########.fr       */
+/*   Created: 2025/12/14 17:32:45 by babe              #+#    #+#             */
+/*   Updated: 2026/03/17 11:07:35 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void	error_exit(int code)
+long long	time_in_ms(void)
 {
-	if (code == -1)
-	{
-		write(2, "Error: Invalid argument\n", 24);
-	}
-	exit(code);
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }

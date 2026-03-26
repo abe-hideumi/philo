@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: babe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 14:31:45 by babe              #+#    #+#             */
-/*   Updated: 2025/12/27 12:44:48 by babe             ###   ########.fr       */
+/*   Updated: 2026/03/22 13:12:47 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,59 @@ static void	param_init(t_params *params, int argc, char **argv)
 		params->count_must_eat = -1;
 	if (params->num_philos <= 0 || params->time_to_die <= 0
 		|| params->time_to_eat <= 0 || params->time_to_sleep <= 0)
-		error_exit(-1);
+		error_exit(EXIT_FAILURE, argument_error);
 	if (argc == 6 && params->count_must_eat <= 0)
-		error_exit(-1);
+		error_exit(EXIT_FAILURE, argument_error);
 }
 
-static void	data_init( t_params *params, t_data *data)
+static void	alloc_data(t_params *params, t_data *data)
+{
+	data->forks = malloc(sizeof(t_fork) * params->num_philos);
+	if (data->forks == NULL)
+	{
+		cleanup_data(data);
+		error_exit(EXIT_FAILURE, malloc_error);
+	}
+	data->philos = malloc(sizeof(t_philo) * params->num_philos);
+	if (data->philos == NULL)
+	{
+		cleanup_data(data);
+		error_exit(EXIT_FAILURE, malloc_error);
+	}
+}
+
+static void	data_init(t_params *params, t_data *data)
 {
 	data->start_time = 0;
 	data->someone_died = 0;
-	pthread_mutex_init(&data->print_mutex, NULL);
-	pthread_mutex_init(&data->died_mutex, NULL);
+	data->forks = NULL;
+	data->philos = NULL;
 	data->params = *params;
-	data->forks = malloc(sizeof(t_fork) * params->num_philos);
-	data->philos = malloc(sizeof(t_philo) * params->num_philos);
-	if (data->forks == NULL || data->philos == NULL)
-		error_exit(-1);
+	if (pthread_mutex_init(&data->print_mutex, NULL))
+		error_exit(EXIT_FAILURE, mutex_error);
+	if (pthread_mutex_init(&data->died_mutex, NULL))
+	{
+		pthread_mutex_destroy(&data->print_mutex);
+		error_exit(EXIT_FAILURE, mutex_error);
+	}
+	alloc_data(params, data);
+}
+
+static void	philo_init(t_params *params, t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < params->num_philos)
+	{
+		data->philos[i].id = i + 1;
+		data->philos[i].data = data;
+		data->philos[i].left_fork = &data->forks[i];
+		data->philos[i].right_fork = &data->forks[(i + 1) % params->num_philos];
+		data->philos[i].eat_count = 0;
+		data->philos[i].last_eat_time = 0;
+		i++;
+	}
 }
 
 static void	mutex_init(t_params *params, t_data *data)
@@ -50,14 +87,17 @@ static void	mutex_init(t_params *params, t_data *data)
 	i = 0;
 	while (i < params->num_philos)
 	{
-		pthread_mutex_init(&data->forks[i].mutex, NULL);
-		data->philos[i].id = i + 1;
-		data->philos[i].data = data;
-		data->philos[i].left_fork = &data->forks[i];
-		data->philos[i].right_fork = &data->forks[(i + 1) % params->num_philos];
-		data->philos[i].eat_count = 0;
-		data->philos[i].last_eat_time = 0;
-		pthread_mutex_init(&data->philos[i].eat_mutex, NULL);
+		if (pthread_mutex_init(&data->forks[i].mutex, NULL))
+		{
+			cleanup_partial(data, i);
+			error_exit(EXIT_FAILURE, mutex_error);
+		}
+		if (pthread_mutex_init(&data->philos[i].eat_mutex, NULL))
+		{
+			pthread_mutex_destroy(&data->forks[i].mutex);
+			cleanup_partial(data, i);
+			error_exit(EXIT_FAILURE, mutex_error);
+		}
 		i++;
 	}
 }
@@ -66,5 +106,6 @@ void	all_init(t_params *params, t_data *data, int argc, char **argv)
 {
 	param_init(params, argc, argv);
 	data_init(params, data);
+	philo_init(params, data);
 	mutex_init(params, data);
 }

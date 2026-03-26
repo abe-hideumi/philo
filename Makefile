@@ -3,26 +3,28 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: babe <habe@student.42tokyo.jp>             +#+  +:+       +#+         #
+#    By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/08 17:22:20 by babe              #+#    #+#              #
-#    Updated: 2026/03/13 12:25:47 by babe             ###   ########.fr        #
+#    Updated: 2026/03/22 13:10:42 by habe             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -pthread
 
 SRCS = main.c \
-		routine/philos_routine.c\
-		routine/times.c
+		src/philos_routine.c \
+		src/times.c \
+		src/thread_create.c \
+		src/init.c \
+		src/cleanup.c \
+		utils/error_exit.c \
+		utils/error_msg.c \
 		utils/ft_atoi.c \
-		utils/error.c \
-		utils/thread_create.c\
-		utils/param_check.c\
-		utils/cleanup.c\
-		utils/init.c\
+		utils/param_check.c \
+		utils/ft_strlen.c \
 
 OBJS = $(SRCS:.c=.o)
 
