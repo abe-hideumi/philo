@@ -6,7 +6,7 @@
 /*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 17:30:29 by babe              #+#    #+#             */
-/*   Updated: 2026/03/28 13:13:32 by habe             ###   ########.fr       */
+/*   Updated: 2026/03/28 18:17:01 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,25 +22,17 @@ static long long	get_last_eat(t_philo *philo)
 	return (t);
 }
 
-static void	philo_eat(t_philo *philo)
+static void	one_philo_routine(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->eat_mutex);
-	philo->last_eat_time = time_in_ms();
-	pthread_mutex_unlock(&philo->eat_mutex);
-	print_status(philo, "is eating");
-	ft_sleep(philo->data->params.time_to_eat, philo->data);
-	pthread_mutex_lock(&philo->eat_mutex);
-	philo->eat_count++;
-	pthread_mutex_unlock(&philo->eat_mutex);
-	if (philo->data->params.count_must_eat != -1
-		&& philo->eat_count >= philo->data->params.count_must_eat)
-	{
-		pthread_mutex_lock(&philo->data->died_mutex);
-		philo->data->ate_enough_count++;
-		if (philo->data->ate_enough_count == philo->data->params.num_philos)
-			philo->data->someone_died = true;
-		pthread_mutex_unlock(&philo->data->died_mutex);
-	}
+	long long	die_at;
+
+	pthread_mutex_lock(&philo->left_fork->mutex);
+	print_status(philo, "has taken a fork");
+	die_at = philo->data->start_time + philo->data->params.time_to_die;
+	while (time_in_ms() < die_at)
+		usleep(500);
+	set_died(philo->data, philo);
+	pthread_mutex_unlock(&philo->left_fork->mutex);
 }
 
 void	*philo_routine(void *arg)

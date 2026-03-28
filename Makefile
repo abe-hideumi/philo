@@ -6,7 +6,7 @@
 #    By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/08 17:22:20 by babe              #+#    #+#              #
-#    Updated: 2026/03/28 13:09:54 by habe             ###   ########.fr        #
+#    Updated: 2026/03/28 18:17:56 by habe             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,12 +15,11 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -pthread
 
 SRCS = main.c \
+		src/philos_actions.c \
 		src/philos_routine.c \
-		src/routine_utils.c \
 		src/times.c \
 		src/thread_create.c \
 		src/init_src.c \
-		src/init.c \
 		src/cleanup.c \
 		utils/error_exit.c \
 		utils/error_msg.c \

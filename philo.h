@@ -6,7 +6,7 @@
 /*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 17:22:22 by babe              #+#    #+#             */
-/*   Updated: 2026/03/28 12:53:27 by habe             ###   ########.fr       */
+/*   Updated: 2026/03/28 18:18:20 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,24 +70,29 @@ void		argument_error(void);
 void		malloc_error(void);
 void		mutex_error(void);
 
-// routine functions
+// time functions
 long long	time_in_ms(void);
+void		ft_sleep(long long ms, t_data *data);
+
+// action functions
 bool		is_died(t_data *data);
 void		set_died(t_data *data, t_philo *philo);
 void		print_status(t_philo *philo, char *status);
-void		one_philo_routine(t_philo *philo);
-void		ft_sleep(long long ms, t_data *data);
+void		philo_eat(t_philo *philo);
+
+// routine functions
 void		*philo_routine(void *arg);
 
 // init functions
-void		all_init(t_params *params, t_data *data, int argc, char **argv);
-void		mutex_init(t_params *params, t_data *data);
+void		param_init(t_params *params, int argc, char **argv);
 void		data_init(t_params *params, t_data *data);
 void		philo_init(t_params *params, t_data *data);
-void		param_init(t_params *params, int argc, char **argv);
+void		mutex_init(t_params *params, t_data *data);
 
 // thread functions
 void		thread_create_join(t_data *data);
+
+// cleanup functions
 void		free_data(t_data *data);
 void		cleanup_data(t_data *data);
 void		cleanup(t_data *data);
