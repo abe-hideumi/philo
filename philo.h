@@ -6,7 +6,7 @@
 /*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 17:22:22 by babe              #+#    #+#             */
-/*   Updated: 2026/03/28 18:18:20 by habe             ###   ########.fr       */
+/*   Updated: 2026/03/29 14:22:29 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ struct s_data
 	int				ate_enough_count;
 	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	died_mutex;
+	pthread_t		monitor_thread;
 	t_params		params;
 	t_fork			*forks;
 	t_philo			*philos;
@@ -82,6 +83,7 @@ void		philo_eat(t_philo *philo);
 
 // routine functions
 void		*philo_routine(void *arg);
+void		*monitor_routine(void *arg);
 
 // init functions
 void		param_init(t_params *params, int argc, char **argv);

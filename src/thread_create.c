@@ -6,7 +6,7 @@
 /*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 19:37:30 by babe              #+#    #+#             */
-/*   Updated: 2026/03/24 16:12:11 by habe             ###   ########.fr       */
+/*   Updated: 2026/03/29 14:22:05 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,11 @@ void	thread_create_join(t_data *data)
 {
 	data->start_time = time_in_ms();
 	thread_create(data);
+	if (pthread_create(&data->monitor_thread, NULL, monitor_routine, data) != 0)
+	{
+		free_data(data);
+		error_exit(EXIT_FAILURE, thread_error);
+	}
 	thread_join(data);
+	pthread_join(data->monitor_thread, NULL);
 }

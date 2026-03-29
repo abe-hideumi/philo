@@ -6,21 +6,11 @@
 /*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 17:30:29 by babe              #+#    #+#             */
-/*   Updated: 2026/03/28 18:17:01 by habe             ###   ########.fr       */
+/*   Updated: 2026/03/29 14:45:11 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-
-static long long	get_last_eat(t_philo *philo)
-{
-	long long	t;
-
-	pthread_mutex_lock(&philo->eat_mutex);
-	t = philo->last_eat_time;
-	pthread_mutex_unlock(&philo->eat_mutex);
-	return (t);
-}
 
 static void	one_philo_routine(t_philo *philo)
 {
@@ -46,9 +36,6 @@ void	*philo_routine(void *arg)
 		usleep(100);
 	while (is_died(philo->data) == false)
 	{
-		if (time_in_ms() - get_last_eat(philo) >= \
-				philo->data->params.time_to_die)
-			return (set_died(philo->data, philo), NULL);
 		pthread_mutex_lock(&philo->left_fork->mutex);
 		print_status(philo, "has taken a fork");
 		pthread_mutex_lock(&philo->right_fork->mutex);

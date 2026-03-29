@@ -36,6 +36,11 @@ bool	is_died(t_data *data)
 void	set_died(t_data *data, t_philo *philo)
 {
 	pthread_mutex_lock(&data->died_mutex);
+	if (data->someone_died)
+	{
+		pthread_mutex_unlock(&data->died_mutex);
+		return ;
+	}
 	data->someone_died = true;
 	pthread_mutex_unlock(&data->died_mutex);
 	pthread_mutex_lock(&philo->data->print_mutex);
