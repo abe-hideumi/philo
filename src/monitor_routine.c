@@ -12,6 +12,26 @@
 
 #include "../philo.h"
 
+static void	set_died(t_data *data, t_philo *philo)
+{
+	pthread_mutex_lock(&data->print_mutex);
+	pthread_mutex_lock(&data->died_mutex);
+	if (data->someone_died == true)
+	{
+		pthread_mutex_unlock(&data->died_mutex);
+		pthread_mutex_unlock(&data->print_mutex);
+		return ;
+	}
+	data->someone_died = true;
+	pthread_mutex_unlock(&data->died_mutex);
+	if (printf("%lld %d died\n", time_in_ms() - data->start_time, philo->id) < 0)
+	{
+		pthread_mutex_unlock(&data->print_mutex);
+		error_exit(EXIT_FAILURE, print_error);
+	}
+	pthread_mutex_unlock(&data->print_mutex);
+}
+
 void	*monitor_routine(void *arg)
 {
 	t_data	*data;

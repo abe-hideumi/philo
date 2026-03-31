@@ -6,7 +6,7 @@
 /*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 17:32:45 by babe              #+#    #+#             */
-/*   Updated: 2026/03/28 18:14:12 by habe             ###   ########.fr       */
+/*   Updated: 2026/03/29 19:42:09 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	ft_sleep(long long ms, t_data *data)
 	end = time_in_ms() + ms;
 	while (time_in_ms() < end)
 	{
-		if (is_died(data))
+		if (is_died(data) == true)
 			return ;
 		usleep(500);
 	}

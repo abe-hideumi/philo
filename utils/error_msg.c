@@ -6,7 +6,7 @@
 /*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 17:54:46 by babe              #+#    #+#             */
-/*   Updated: 2026/03/17 12:35:38 by habe             ###   ########.fr       */
+/*   Updated: 2026/03/29 19:10:37 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,13 @@ void	mutex_error(void)
 	char	*msg;
 
 	msg = "Error: Mutex initialization failed\n";
+	write(2, msg, ft_strlen(msg));
+}
+
+void	print_error(void)
+{
+	char	*msg;
+
+	msg = "Error: A printf error occurred\n";
 	write(2, msg, ft_strlen(msg));
 }

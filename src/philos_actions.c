@@ -6,7 +6,7 @@
 /*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/28 12:50:39 by habe              #+#    #+#             */
-/*   Updated: 2026/03/28 18:18:09 by habe             ###   ########.fr       */
+/*   Updated: 2026/03/29 19:35:08 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,15 @@ void	print_status(t_philo *philo, char *status)
 	if (is_died(philo->data) == true)
 		return ;
 	pthread_mutex_lock(&philo->data->print_mutex);
-	if (!is_died(philo->data))
-		printf("%lld %d %s\n", time_in_ms() - philo->data->start_time,
-			philo->id, status);
+	if (is_died(philo->data) == false)
+	{
+		if (printf("%lld %d %s\n", time_in_ms() - philo->data->start_time,
+			philo->id, status) < 0)
+		{
+			pthread_mutex_unlock(&philo->data->print_mutex);
+			error_exit(EXIT_FAILURE, print_error);
+		}
+	}
 	pthread_mutex_unlock(&philo->data->print_mutex);
 }
 
@@ -33,19 +39,18 @@ bool	is_died(t_data *data)
 	return (result);
 }
 
-void	set_died(t_data *data, t_philo *philo)
+void	philo_think(t_philo *philo)
 {
-	pthread_mutex_lock(&data->died_mutex);
-	if (data->someone_died)
-	{
-		pthread_mutex_unlock(&data->died_mutex);
+	long long	think_time;
+
+	print_status(philo, "is thinking");
+	if (philo->data->params.num_philos % 2 == 0)
 		return ;
-	}
-	data->someone_died = true;
-	pthread_mutex_unlock(&data->died_mutex);
-	pthread_mutex_lock(&philo->data->print_mutex);
-	printf("%lld %d died\n", time_in_ms() - philo->data->start_time, philo->id);
-	pthread_mutex_unlock(&philo->data->print_mutex);
+	think_time = 2 * philo->data->params.time_to_eat
+		- philo->data->params.time_to_sleep;
+	if (think_time <= 0)
+		think_time = 1;
+	ft_sleep(think_time, philo->data);
 }
 
 void	philo_eat(t_philo *philo)
@@ -58,7 +63,8 @@ void	philo_eat(t_philo *philo)
 	pthread_mutex_lock(&philo->eat_mutex);
 	philo->eat_count++;
 	pthread_mutex_unlock(&philo->eat_mutex);
-	if (philo->eat_count == philo->data->params.count_must_eat)
+	if (philo->data->params.count_must_eat != -1
+		&& philo->eat_count == philo->data->params.count_must_eat)
 	{
 		pthread_mutex_lock(&philo->data->died_mutex);
 		philo->data->ate_enough_count++;
@@ -66,4 +72,25 @@ void	philo_eat(t_philo *philo)
 			philo->data->someone_died = true;
 		pthread_mutex_unlock(&philo->data->died_mutex);
 	}
+}
+
+void	take_forks(t_philo *philo)
+{
+	t_fork	*first;
+	t_fork	*second;
+
+	if (philo->id == philo->data->params.num_philos)
+	{
+		first = philo->right_fork;
+		second = philo->left_fork;
+	}
+	else
+	{
+		first = philo->left_fork;
+		second = philo->right_fork;
+	}
+	pthread_mutex_lock(&first->mutex);
+	print_status(philo, "has taken a fork");
+	pthread_mutex_lock(&second->mutex);
+	print_status(philo, "has taken a fork");
 }
