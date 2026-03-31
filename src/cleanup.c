@@ -41,13 +41,13 @@ void	cleanup(t_data *data)
 	cleanup_data(data);
 }
 
-void	cleanup_partial(t_data *data, int must)
+void	cleanup_partial(t_data *data, int count)
 {
-	while (must > 0)
+	while (count > 0)
 	{
-		must--;
-		pthread_mutex_destroy(&data->philos[must].eat_mutex);
-		pthread_mutex_destroy(&data->forks[must].mutex);
+		count--;
+		pthread_mutex_destroy(&data->philos[count].eat_mutex);
+		pthread_mutex_destroy(&data->forks[count].mutex);
 	}
 	cleanup_data(data);
 }

@@ -19,7 +19,10 @@ int	main(int argc, char **argv)
 
 	if (argc != 5 && argc != 6)
 		error_exit(EXIT_FAILURE, argument_error);
-	all_init(&params, &data, argc, argv);
+	param_init(&params, argc, argv);
+	data_init(&params, &data);
+	philo_init(&params, &data);
+	mutex_init(&params, &data);
 	thread_create_join(&data);
 	cleanup(&data);
 	return (0);

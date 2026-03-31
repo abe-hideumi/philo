@@ -6,41 +6,18 @@
 /*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 17:30:29 by babe              #+#    #+#             */
-/*   Updated: 2026/03/28 13:13:32 by habe             ###   ########.fr       */
+/*   Updated: 2026/03/29 19:41:48 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-static long long	get_last_eat(t_philo *philo)
+static void	one_philo_routine(t_philo *philo)
 {
-	long long	t;
-
-	pthread_mutex_lock(&philo->eat_mutex);
-	t = philo->last_eat_time;
-	pthread_mutex_unlock(&philo->eat_mutex);
-	return (t);
-}
-
-static void	philo_eat(t_philo *philo)
-{
-	pthread_mutex_lock(&philo->eat_mutex);
-	philo->last_eat_time = time_in_ms();
-	pthread_mutex_unlock(&philo->eat_mutex);
-	print_status(philo, "is eating");
-	ft_sleep(philo->data->params.time_to_eat, philo->data);
-	pthread_mutex_lock(&philo->eat_mutex);
-	philo->eat_count++;
-	pthread_mutex_unlock(&philo->eat_mutex);
-	if (philo->data->params.count_must_eat != -1
-		&& philo->eat_count >= philo->data->params.count_must_eat)
-	{
-		pthread_mutex_lock(&philo->data->died_mutex);
-		philo->data->ate_enough_count++;
-		if (philo->data->ate_enough_count == philo->data->params.num_philos)
-			philo->data->someone_died = true;
-		pthread_mutex_unlock(&philo->data->died_mutex);
-	}
+	pthread_mutex_lock(&philo->left_fork->mutex);
+	print_status(philo, "has taken a fork");
+	ft_sleep(philo->data->params.time_to_die, philo->data);
+	pthread_mutex_unlock(&philo->left_fork->mutex);
 }
 
 void	*philo_routine(void *arg)
@@ -49,24 +26,21 @@ void	*philo_routine(void *arg)
 
 	philo = (t_philo *)arg;
 	if (philo->data->params.num_philos == 1)
-		return (one_philo_routine(philo), NULL);
+	{
+		one_philo_routine(philo);
+		return (NULL);
+	}
 	if (philo->id % 2 == 0)
-		usleep(100);
+		ft_sleep(philo->data->params.time_to_eat, philo->data);
 	while (is_died(philo->data) == false)
 	{
-		if (time_in_ms() - get_last_eat(philo) >= \
-				philo->data->params.time_to_die)
-			return (set_died(philo->data, philo), NULL);
-		pthread_mutex_lock(&philo->left_fork->mutex);
-		print_status(philo, "has taken a fork");
-		pthread_mutex_lock(&philo->right_fork->mutex);
-		print_status(philo, "has taken a fork");
+		take_forks(philo);
 		philo_eat(philo);
 		pthread_mutex_unlock(&philo->right_fork->mutex);
 		pthread_mutex_unlock(&philo->left_fork->mutex);
 		print_status(philo, "is sleeping");
 		ft_sleep(philo->data->params.time_to_sleep, philo->data);
-		print_status(philo, "is thinking");
+		philo_think(philo);
 	}
 	return (NULL);
 }

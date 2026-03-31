@@ -49,6 +49,7 @@ make
 - [Trying out multithreading](https://zenn.dev/rinngo0302/articles/d1aa031137de9f)
 - [The Basics of std::thread::join(): "Waiting" for Another Thread to Finish](https://note.com/morinokabu/n/n5d3c0b1df213)
 - [Dining Philosophers Problem - Wikipedia](https://ja.wikipedia.org/wiki/%E9%A3%9F%E4%BA%8B%E3%81%99%E3%82%8B%E5%93%B2%E5%AD%A6%E8%80%85%E3%81%AE%E5%95%8F%E9%A1%8C)
+- [Kofman's Fourth Condition](https://inzkyk.xyz/julia_doc/devdocs/locks/)
 
 ### philosophers-visualizer
 
