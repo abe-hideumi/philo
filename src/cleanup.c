@@ -6,7 +6,7 @@
 /*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 17:05:00 by babe              #+#    #+#             */
-/*   Updated: 2026/03/22 13:40:45 by habe             ###   ########.fr       */
+/*   Updated: 2026/03/31 12:21:36 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	free_data(t_data *data)
 {
-	if (data->forks)
+	if (data->forks != NULL)
 		free(data->forks);
-	if (data->philos)
+	if (data->philos != NULL)
 		free(data->philos);
 }
 
@@ -27,21 +27,7 @@ void	cleanup_data(t_data *data)
 	free_data(data);
 }
 
-void	cleanup(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->params.num_philos)
-	{
-		pthread_mutex_destroy(&data->philos[i].eat_mutex);
-		pthread_mutex_destroy(&data->forks[i].mutex);
-		i++;
-	}
-	cleanup_data(data);
-}
-
-void	cleanup_partial(t_data *data, int count)
+void	cleanup(t_data *data, int count)
 {
 	while (count > 0)
 	{

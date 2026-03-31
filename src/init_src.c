@@ -90,13 +90,13 @@ void	mutex_init(t_params *params, t_data *data)
 	{
 		if (pthread_mutex_init(&data->forks[i].mutex, NULL) != 0)
 		{
-			cleanup_partial(data, i);
+			cleanup(data, i);
 			error_exit(EXIT_FAILURE, mutex_error);
 		}
 		if (pthread_mutex_init(&data->philos[i].eat_mutex, NULL) != 0)
 		{
 			pthread_mutex_destroy(&data->forks[i].mutex);
-			cleanup_partial(data, i);
+			cleanup(data, i);
 			error_exit(EXIT_FAILURE, mutex_error);
 		}
 		i++;
