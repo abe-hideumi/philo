@@ -6,7 +6,7 @@
 /*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:21:27 by habe              #+#    #+#             */
-/*   Updated: 2026/03/29 14:30:45 by habe             ###   ########.fr       */
+/*   Updated: 2026/04/04 11:48:42 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ static void	set_died(t_data *data, t_philo *philo)
 	}
 	data->someone_died = true;
 	pthread_mutex_unlock(&data->died_mutex);
-	if (printf("%lld %d died\n", time_in_ms() - data->start_time, philo->id) < 0)
+	if (printf("%lld %d died\n", time_in_ms() - data->start_time,
+			philo->id) < 0)
 	{
 		pthread_mutex_unlock(&data->print_mutex);
 		error_exit(EXIT_FAILURE, print_error);

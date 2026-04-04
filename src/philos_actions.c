@@ -6,7 +6,7 @@
 /*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/28 12:50:39 by habe              #+#    #+#             */
-/*   Updated: 2026/03/31 13:03:29 by habe             ###   ########.fr       */
+/*   Updated: 2026/04/04 11:48:28 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	print_status(t_philo *philo, char *status)
 	pthread_mutex_lock(&philo->data->print_mutex);
 	if (is_died(philo->data) == false)
 	{
-		if (printf("%lld %d %s\n", time_in_ms() - philo->data->start_time, \
+		if (printf("%lld %d %s\n", time_in_ms() - philo->data->start_time,
 				philo->id, status) < 0)
 		{
 			pthread_mutex_unlock(&philo->data->print_mutex);
