@@ -6,34 +6,35 @@
 /*   By: habe <habe@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 15:24:14 by babe              #+#    #+#             */
-/*   Updated: 2026/03/17 12:16:32 by habe             ###   ########.fr       */
+/*   Updated: 2026/03/31 12:04:02 by habe             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-static void	check_arg(char *str)
+static int	check_arg(char *str)
 {
 	int	i;
 	int	len;
 
 	i = 0;
 	if (str[i] == '\0' || str[i] == '-')
-		error_exit(EXIT_FAILURE, argument_error);
+		return (1);
 	if (str[i] == '+')
 		i++;
 	if (str[i] == '\0')
-		error_exit(EXIT_FAILURE, argument_error);
+		return (1);
 	len = 0;
 	while (str[i] != '\0')
 	{
 		if (str[i] < '0' || str[i] > '9')
-			error_exit(EXIT_FAILURE, argument_error);
+			return (1);
 		len++;
 		i++;
 	}
 	if (len > 10)
-		error_exit(EXIT_FAILURE, argument_error);
+		return (1);
+	return (0);
 }
 
 void	param_check(int argc, char **argv)
@@ -43,7 +44,8 @@ void	param_check(int argc, char **argv)
 	i = 1;
 	while (i < argc)
 	{
-		check_arg(argv[i]);
+		if (check_arg(argv[i]) != 0)
+			error_exit(EXIT_FAILURE, argument_error);
 		i++;
 	}
 }

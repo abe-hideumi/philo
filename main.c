@@ -24,6 +24,6 @@ int	main(int argc, char **argv)
 	philo_init(&params, &data);
 	mutex_init(&params, &data);
 	thread_create_join(&data);
-	cleanup(&data);
+	cleanup(&data, data.params.num_philos);
 	return (0);
 }

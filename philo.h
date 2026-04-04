@@ -97,8 +97,7 @@ void		thread_create_join(t_data *data);
 // cleanup functions
 void		free_data(t_data *data);
 void		cleanup_data(t_data *data);
-void		cleanup(t_data *data);
-void		cleanup_partial(t_data *data, int count);
+void		cleanup(t_data *data, int count);
 
 // utils functions
 size_t		ft_strlen(const char *s);
